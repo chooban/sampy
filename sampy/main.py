@@ -1,39 +1,46 @@
 import sys
-import os
 
 from lib import Options
-from lib import Sam
+from lib import SamSearcher
+
+def print_match_counts(searcher, match_type):
+    if match_type == 'leading':
+        print "Found", searcher.count_leading(), "matches"
+    elif match_type == 'trailing':
+        print "Found", searcher.count_trailing(), "matches"
+    elif match_type == 'midway':
+        print "Found", searcher.count_midway(), "matches"
+
+def print_matches(search, match_type):
+    if match_type == 'leading':
+        print "Found", searcher.leading_matches()
+    elif match_type == 'trailing':
+        print "Found", searcher.trailing_matches()
+    elif match_type == 'midway':
+        print "Found", searcher.midway_matches()
 
 if __name__ == '__main__':
     options = Options()
+
+    if len(sys.argv[1:]) == 0:
+        options.help()
+        sys.exit(0)
+
     opts = options.parse(sys.argv[1:])
 
     if opts.input_file == None:
         print("Please supply an input file")
         sys.exit(1)
 
-    if not os.path.isfile(opts.input_file):
-        print("Could not find specified file")
+    try:
+        searcher = SamSearcher(opts.input_file, opts.sequence)
+    except:
+        print sys.exc_info()
         sys.exit(1)
 
-    sam_file = open(opts.input_file, 'r')
+    if opts.count:
+        print_match_counts(searcher, opts.type)
+    else:
+        print_matches(searcher, opts.type)
 
-    subseq = opts.sequence.upper()
-    sam = Sam()
-    for line in sam_file.readlines():
-        seq = sam.extract_sequence(line)
-        if seq == None:
-            continue
-
-        if opts.type == 'leading':
-            match = sam.is_leading_match(seq, subseq)
-            if match:
-                print subseq + ' is a leading match in ' + seq
-        elif opts.type == 'trailing':
-            match = sam.is_trailing_match(seq, subseq)
-            if match:
-                print subseq + ' is a trailing match in ' + seq
-        elif opts.type == 'midway':
-            match = sam.is_midway_match(seq, subseq)
-            if match:
-                print subseq + ' is a midway match in ' + seq
+    sys.exit(0)

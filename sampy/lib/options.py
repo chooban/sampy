@@ -22,6 +22,14 @@ class Options:
                                  default='leading',
                                  dest='type',
                                  help='Type of match')
+        self.parser.add_argument('-c',
+                                '--count',
+                                default=False,
+                                action='store_true',
+                                help='Print counts instead of matches')
 
     def parse(self, args=None):
         return self.parser.parse_args(args)
+
+    def help(self):
+        self.parser.print_help()
