@@ -4,12 +4,33 @@ from . import Sam
 
 class SamSearcher:
 
-    def __init__(self, filepath, subsequence):
+    def __init__(self, filepath, subsequence, match_type):
         self.filepath = filepath
         self.subsequence = subsequence.upper()
+        self.match_type = match_type
         self.sam = Sam()
         if not os.path.isfile(self.filepath):
             raise Exception(self.filepath + " not found")
+
+    def count(self):
+        if self.match_type == 'leading':
+            return self.count_leading()
+        elif self.match_type == 'trailing':
+            return self.count_trailing()
+        elif self.match_type == 'midway':
+            return self.count_midway();
+        else:
+            raise Exception("Unknown match type")
+
+    def matches(self):
+        if self.match_type == 'leading':
+            return self.leading_matches()
+        elif self.match_type == 'trailing':
+            return self.trailing_matches()
+        elif self.match_type == 'midway':
+            return self.midway_matches();
+        else:
+            raise Exception("Unknown match type")
 
     def leading_matches(self):
         matches = []

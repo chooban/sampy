@@ -1,3 +1,5 @@
+import glob
+
 from argparse import ArgumentParser
 
 class Options:
@@ -8,10 +10,9 @@ class Options:
     def _init_parser(self):
         usage = 'bin/extract-counts'
         self.parser = ArgumentParser(usage=usage)
-        self.parser.add_argument('-i',
-                                 '--input-file',
-                                 dest='input_file',
-                                 help='Input file to read')
+        self.parser.add_argument('input_files',
+                                 nargs='*',
+                                 help='Input file(s) to read')
         self.parser.add_argument('-s',
                                  '--sequence',
                                  required=True,
