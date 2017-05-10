@@ -18,11 +18,10 @@ Run the command without any arguments to print the help.
 
 ## Examples
 
-``shell
+```shell
 $> ./bin/extract-counts -s tta -c data/toy.sam
 Found 2 matches for tta
 
 $> ./bin/extract-counts -s tta -c data/*.sam
 Found 4 matches for tta
-
 ```
